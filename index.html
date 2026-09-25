@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marshmallow Meltdown Virtual Lab</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#64748b;--line:#dbe2ea;--accent:#8b3dff;--accent2:#efe7ff;--hot:#ff8a3d}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#202838;color:white;padding:18px 20px;text-align:center} header h1{margin:0;font-size:clamp(24px,4vw,38px)} header p{margin:6px 0 0;color:#d9e1ee}
+.wrap{max-width:1100px;margin:auto;padding:18px}.grid{display:grid;grid-template-columns:1.4fr .8fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}.methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.method,.btn{border:1px solid var(--line);border-radius:12px;background:white;padding:12px;font-weight:700;cursor:pointer;font-size:15px}.method.active{outline:3px solid var(--accent);background:var(--accent2)}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.chamber{position:relative;min-height:360px;margin-top:14px;border:2px solid var(--line);border-radius:16px;background:linear-gradient(#eef5fb,#fff);overflow:hidden;display:flex;align-items:center;justify-content:center}.apparatus{position:absolute;top:14px;left:10px;right:10px;text-align:center;font-weight:700}.labobj{text-align:center;margin-top:25px}.mallow{width:120px;height:100px;background:#fff;border:3px solid #b9a58f;border-radius:46%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:auto;transition:.3s}.stick{width:8px;height:100px;background:#a97b50;margin:auto}.heater{font-size:54px;line-height:1}.meter{position:absolute;bottom:12px;background:white;border:1px solid var(--line);border-radius:10px;padding:8px 10px}.left{left:12px}.right{right:12px;text-align:right}.meter small{display:block;color:var(--muted);font-size:11px}.meter strong{font-size:21px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.status{margin-top:10px;font-weight:700}.side{display:grid;gap:16px;align-content:start}.side h2,.card h2{margin:0 0 8px}.hint{color:var(--muted);font-size:14px;line-height:1.45}.data{width:100%;border-collapse:collapse;font-size:14px}.data th,.data td{border-bottom:1px solid var(--line);padding:8px 4px;text-align:center}.data th:first-child,.data td:first-child{text-align:left}.learn{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.learn .card{font-size:14px}.open{margin-top:16px}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.controls label{font-weight:700;font-size:14px}.controls select{width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:9px;background:white;font-size:16px}.result{margin-top:12px;padding:12px;background:#f8fafc;border-radius:10px;min-height:45px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}.tag{display:inline-block;padding:4px 9px;border-radius:999px;background:var(--accent2);font-size:12px;font-weight:700}.progress{height:9px;background:#e6eaf0;border-radius:99px;overflow:hidden;margin-top:10px}.bar{height:100%;width:0;background:var(--hot);transition:width .1s linear}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.controls,.learn{grid-template-columns:1fr}.chamber{min-height:330px}.methods{grid-template-columns:1fr}.method{padding:10px}.meter strong{font-size:18px}}
+</style>
+</head>
+<body>
+<header><h1>🔥 Marshmallow Meltdown</h1><p>Virtual Thermal Energy Transfer Lab • Conduction • Convection • Radiation</p></header>
+<main class="wrap">
+<div class="grid">
+<section class="card">
+<h2>Heating Chamber</h2>
+<p class="hint">All marshmallows begin at <b>22°C</b>. Choose a heat-transfer method and run the 2-minute simulated trial.</p>
+<div class="methods">
+<button class="method" data-method="conduction">♨️<br>Conduction</button>
+<button class="method" data-method="convection">💨<br>Convection</button>
+<button class="method" data-method="radiation">☀️<br>Radiation</button>
+</div>
+<div class="chamber">
+<div id="apparatus" class="apparatus">Select a method to set up the experiment.</div>
+<div class="labobj"><div id="mallow" class="mallow"><span id="face">•ᴗ•</span></div><div id="stick" class="stick"></div><div id="heater" class="heater">⬜</div></div>
+<div class="meter left"><small>TEMPERATURE</small><strong id="temp">22°C</strong></div>
+<div class="meter right"><small>GOOEYNESS</small><strong id="goo">1 / 5</strong><div id="gooWord">Firm</div></div>
+</div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div class="actions"><button id="start" class="btn primary" disabled>▶ Start Heating</button><button id="reset" class="btn">↻ Reset Trial</button></div>
+<div id="status" class="status" aria-live="polite">Choose a method to begin.</div>
+</section>
+<aside class="side">
+<section class="card"><h2>🔬 What's happening?</h2><div id="explain" class="hint">Select a method to see how thermal energy reaches the marshmallow.</div></section>
+<section class="card"><h2>📋 Lab Data</h2><p class="hint">Record these results on your lab sheet.</p><table class="data"><thead><tr><th>Method</th><th>Final</th><th>ΔT</th><th>Gooey</th></tr></thead><tbody id="results"><tr><td colspan="4" class="hint" style="text-align:center">No trials yet</td></tr></tbody></table></section>
+<section class="card"><span class="tag">REMEMBER</span><p class="hint"><b>Thermal energy moves from warmer matter to cooler matter.</b> As the marshmallow heats, its particles gain average kinetic energy and move faster.</p></section>
+</aside>
+</div>
+
+<section class="card open">
+<h2>🧪 Test It Out!</h2>
+<p class="hint">Design your own trial after completing the controlled investigation. Change the variables, predict what will happen, and then run your test.</p>
+<div class="controls">
+<label>Heat-transfer method<select id="customMethod"><option value="conduction">Conduction</option><option value="convection">Convection</option><option value="radiation">Radiation</option></select></label>
+<label>Heating time<select id="customTime"><option value="60">1 minute</option><option value="90">1.5 minutes</option><option value="120" selected>2 minutes</option><option value="150">2.5 minutes</option><option value="180">3 minutes</option></select></label>
+<label>Skewer material<select id="skewer"><option value="wood">Wood</option><option value="metal">Metal</option></select></label>
+</div>
+<div class="actions"><button id="customRun" class="btn primary">Run My Test</button></div>
+<div id="customResult" class="result hint" aria-live="polite">Choose your variables and test your prediction.</div>
+</section>
+
+<section class="learn">
+<div class="card"><h2>♨️ Conduction</h2><p class="hint">Thermal energy transfers through <b>direct contact</b> between matter.</p></div>
+<div class="card"><h2>💨 Convection</h2><p class="hint">Thermal energy is carried by the movement of a <b>fluid</b>, such as air or water.</p></div>
+<div class="card"><h2>☀️ Radiation</h2><p class="hint">Thermal energy travels by <b>electromagnetic waves</b> and does not require direct contact.</p></div>
+</section>
+<div class="footer">Marshmallow Meltdown • 7th Grade Science Virtual Lab</div>
+</main>
+<script>
+const DATA={
+ conduction:{name:"Conduction",final:68,goo:5,icon:"♨️",setup:"The marshmallow is touching a heated metal surface.",explain:"Direct contact transfers thermal energy from the hot metal into the marshmallow.",rate:23},
+ convection:{name:"Convection",final:52,goo:3,icon:"💨",setup:"Moving hot air surrounds the marshmallow.",explain:"The moving fluid carries thermal energy to the marshmallow by convection.",rate:15},
+ radiation:{name:"Radiation",final:61,goo:4,icon:"☀️",setup:"A heat lamp shines toward the marshmallow.",explain:"Electromagnetic waves transfer thermal energy from the lamp to the marshmallow.",rate:19.5}
+};
+let selected=null,running=false,frame=null,records={};
+const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+const labels=["","Firm","Slightly soft","Soft","Gooey","Very gooey"];
+function setVisual(temp,g){
+ const m=q("#mallow"); m.style.transform=`scaleY(${Math.max(.72,1-(g-1)*.055)}) scaleX(${1+(g-1)*.04})`;
+ const green=Math.max(220,255-Math.max(0,temp-35)*.5); m.style.background=`rgb(255,${Math.round(green)},${Math.round(green-10)})`;
+ q("#face").textContent=g>=5?"•﹏•":g>=4?"•◡•":"•ᴗ•";
+}
+function selectMethod(k){
+ if(running)return; selected=k; const d=DATA[k];
+ qa(".method").forEach(b=>b.classList.toggle("active",b.dataset.method===k));
+ q("#apparatus").textContent=d.setup;q("#heater").textContent=d.icon;q("#explain").innerHTML=`<b>${d.name}:</b> ${d.explain}`;
+ q("#start").disabled=false;q("#status").textContent=`Ready: ${d.name}. Run the 2-minute trial.`;
+}
+qa(".method").forEach(b=>b.addEventListener("click",()=>selectMethod(b.dataset.method)));
+function reset(){
+ if(frame)cancelAnimationFrame(frame);running=false;q("#temp").textContent="22°C";q("#goo").textContent="1 / 5";q("#gooWord").textContent="Firm";q("#bar").style.width="0%";setVisual(22,1);q("#start").disabled=!selected;q("#status").textContent=selected?`Ready to run ${DATA[selected].name}.`:"Choose a method to begin.";
+}
+q("#reset").addEventListener("click",reset);
+function renderRecords(){
+ const keys=Object.keys(records); if(!keys.length)return;
+ q("#results").innerHTML=keys.map(k=>{const r=records[k];return `<tr><td><b>${DATA[k].name}</b></td><td>${r.final}°C</td><td>+${r.final-22}°C</td><td>${r.goo}/5</td></tr>`}).join("");
+}
+q("#start").addEventListener("click",()=>{
+ if(!selected||running)return; running=true;q("#start").disabled=true;const d=DATA[selected],start=performance.now(),duration=6000;
+ function tick(now){
+  const p=Math.min(1,(now-start)/duration),seconds=Math.round(120*p),temp=Math.round(22+(d.final-22)*p),g=Math.min(d.goo,Math.max(1,Math.ceil(d.goo*p)));
+  q("#temp").textContent=temp+"°C";q("#goo").textContent=g+" / 5";q("#gooWord").textContent=labels[g];q("#bar").style.width=(p*100)+"%";setVisual(temp,g);
+  q("#status").textContent=p<1?`Heating… ${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,"0")} simulated time`:"Trial complete! Record your data.";
+  if(p<1)frame=requestAnimationFrame(tick);else{running=false;records[selected]={final:d.final,goo:d.goo};renderRecords();q("#start").disabled=false;}
+ } frame=requestAnimationFrame(tick);
+});
+q("#customRun").addEventListener("click",()=>{
+ const k=q("#customMethod").value,seconds=Number(q("#customTime").value),material=q("#skewer").value,d=DATA[k],minutes=seconds/60;
+ const final=Math.round((22+d.rate*minutes)*10)/10,g=Math.min(5,Math.max(1,Math.round(1+(final-22)/12)));
+ const sk=material==="metal"?"Because metal is a better conductor, thermal energy would also travel along the skewer more quickly.":"Wood is a poorer thermal conductor, so less thermal energy would travel along the handle.";
+ q("#customResult").innerHTML=`<b>${d.name}, ${minutes} min, ${material} skewer:</b> predicted final temperature ≈ <b>${final}°C</b>; gooeyness ≈ <b>${g}/5 (${labels[g]})</b>.<br>${sk}`;
+});
+setVisual(22,1);
+</script>
+</body>
+</html>
