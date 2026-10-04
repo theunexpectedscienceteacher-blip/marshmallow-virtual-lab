@@ -634,7 +634,7 @@ function renderAttempts() {
 
 /* ---------- main loop ---------- */
 function frame(now) {
-  const dtReal = Math.min(0.05, (now - lastFrame) / 1000); lastFrame = now; clockT += dtReal;
+  const dtReal = Math.min(0.25, (now - lastFrame) / 1000); lastFrame = now; clockT += dtReal;
   const active = document.querySelector(".panel.active").id;
   // Heat lab: 2:00 in 12 s
   if (lab.running) {
